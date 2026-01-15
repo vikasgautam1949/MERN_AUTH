@@ -1,33 +1,27 @@
-import express from "express"
+import express from "express";
 import dotenv from "dotenv";
-dotenv.config(); 
-import connectDB from "./database/db.js"
-import userRoute from "./routes/userRoute.js"
-import authRoute from "./routes/authRoute.js"
-import cors from 'cors'
-import "./config/passport.js"
+dotenv.config();
+import connectDB from "./database/db.js";
+import userRoute from "./routes/userRoute.js";
+import authRoute from "./routes/authRoute.js";
+import cors from "cors";
+import "./config/passport.js";
 
-const app = express()
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
-app.get('/text',(req,res)=>{
-  res.send("hello")
-})
+app.use("/auth", authRoute);
+app.use("/user", userRoute);
 
-app.use(express.json())
-app.use(cors({
-    origin:'http://localhost:5173',
-    credentials:true
-}))
-
-app.use('/auth', authRoute)
-app.use('/user', userRoute)
-
-http://localhost:8000/user/register
-
-
-app.listen(PORT,()=>{
-    connectDB()
-    console.log(`Server is listening at port ${PORT}`);  
-})
+app.listen(PORT, () => {
+  connectDB();
+  console.log(`Server is listening at port ${PORT}`);
+});
